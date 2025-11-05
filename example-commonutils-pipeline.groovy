@@ -4,7 +4,7 @@
  */
 
 // Import the shared library
-@Library('jenkins-pipeline-sample') _
+library identifier: 'jenkins-pipeline-sample@main', retriever: modernSCM(gitSource(traits: [gitBranchDiscovery()], credentialsId: 'GitHub-ssh', remote: 'git@github.com:yangwenjie008/jenkins-pipeline-sample.git'))
 
 pipeline {
     agent any

@@ -2,7 +2,7 @@
 // 展示多种使用 mySteps.groovy 的方式
 
 // 方式1: 在 pipeline 块外部声明共享库
-@Library('jenkins-pipeline-sample') _
+library identifier: 'jenkins-pipeline-sample@main', retriever: modernSCM(gitSource(traits: [gitBranchDiscovery()], credentialsId: 'GitHub-ssh', remote: 'git@github.com:yangwenjie008/jenkins-pipeline-sample.git'))
 
 pipeline {
     agent any
