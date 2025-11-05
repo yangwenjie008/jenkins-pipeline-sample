@@ -8,6 +8,13 @@ pipeline {
     }
     
     stages {
+        stage('test'){
+            steps{
+                script{
+                    sh "./gradlew clean test"
+                }
+            }
+        }
         stage('Hello') {
             steps {
                 script {
