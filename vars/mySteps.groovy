@@ -1,16 +1,16 @@
 // Script object for Jenkins pipeline steps
-def script
+
 
 def sayHello(String name){
-    script.echo "Hello ${name}"
+    echo "Hello ${name}"
 }
 
 def runBuild(String app){
-    script.sh "echo Building ${app}"
+    sh "echo Building ${app}"
 }
 
 def deployToEnv(String env){
-    script.sh "echo Deploying to ${env}"
+    sh "echo Deploying to ${env}"
 }
 
 return this
