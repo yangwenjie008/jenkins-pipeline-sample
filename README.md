@@ -103,6 +103,73 @@ Test results:
 
 这将执行测试并生成JaCoCo覆盖率报告。
 
+## 将项目推送到GitHub
+
+要将此项目推送到GitHub，请按照以下步骤操作：
+
+### 1. 在GitHub上创建新仓库
+
+1. 登录到您的GitHub账户
+2. 点击右上角的"+"号，选择"New repository"
+3. 为仓库输入一个名称（例如：jenkins-pipeline-sample）
+4. （可选）添加描述
+5. 选择仓库的可见性（Public或Private）
+6. 不要初始化仓库（不要勾选"Initialize this repository with a README"）
+7. 点击"Create repository"
+
+### 2. 将本地项目推送到GitHub
+
+如果您已经按照前面的步骤初始化了Git仓库，可以使用以下命令：
+
+```bash
+# 添加GitHub远程仓库（将URL替换为您在GitHub上创建的仓库URL）
+git remote add origin https://github.com/yourusername/your-repo-name.git
+
+# 验证远程仓库已正确添加
+git remote -v
+
+# 推送代码到GitHub
+git push -u origin master
+```
+
+如果您还没有初始化Git仓库，请按以下步骤操作：
+
+```bash
+# 初始化Git仓库
+git init
+
+# 添加所有文件
+git add .
+
+# 设置您的Git用户信息（如果尚未设置）
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+
+# 创建初始提交
+git commit -m "Initial commit"
+
+# 添加GitHub远程仓库（将URL替换为您在GitHub上创建的仓库URL）
+git remote add origin https://github.com/yourusername/your-repo-name.git
+
+# 推送代码到GitHub
+git push -u origin master
+```
+
+### 3. 后续推送更改
+
+在进行更改并提交后，可以使用以下命令推送：
+
+```bash
+# 添加更改的文件
+git add .
+
+# 提交更改
+git commit -m "描述您的更改"
+
+# 推送到GitHub
+git push
+```
+
 ## 在本地运行Jenkins
 
 要在本地运行Jenkins并测试此共享库，您可以按照以下步骤操作：
@@ -305,3 +372,10 @@ pipeline {
 5. 运行Pipeline测试您的更改
 
 或者，您可以使用Jenkins的"Pipeline script from SCM"功能直接从本地Git仓库运行Pipeline，而无需配置全局共享库。
+
+## 注意事项
+
+1. 该项目使用Java 17进行编译和测试
+2. 由于Jenkins共享库的特殊性质，传统的代码覆盖率工具可能无法提供准确的覆盖率数据
+3. 最重要的指标是确保所有共享库函数都有相应的测试用例
+4. 测试与源文件的比例应尽可能保持平衡
