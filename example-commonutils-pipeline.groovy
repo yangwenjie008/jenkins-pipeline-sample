@@ -1,7 +1,4 @@
-/**
- * Example Jenkins Pipeline demonstrating the usage of CommonUtils class
- * This pipeline shows how to use various methods from the CommonUtils class
- */
+
 
 // Import the shared library
 library identifier: 'jenkins-pipeline-sample@main', retriever: modernSCM(gitSource(traits: [gitBranchDiscovery()], credentialsId: 'GitHub-ssh', remote: 'git@github.com:yangwenjie008/jenkins-pipeline-sample.git'))
@@ -14,7 +11,7 @@ pipeline {
             steps {
                 script {
                     // Import the CommonUtils class
-                    def commonUtils = new com.pipeline.CommonUtils()
+                    // def commonUtils = com.pipeline.CommonUtils()
                     
                     // Demo formatTimestamp method
                     def currentTime = System.currentTimeMillis()
