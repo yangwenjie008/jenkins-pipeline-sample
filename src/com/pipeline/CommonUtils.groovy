@@ -69,9 +69,10 @@ class CommonUtils {
         if (bytes < unit) {
             return "${bytes} B"
         }
-        int exp = (int) (Math.log(bytes.toDouble()) / Math.log(unit.toDouble()))
+        // 使用安全的数值转换方法，避免Jenkins脚本安全限制
+        int exp = (int) (Math.log((double)bytes) / Math.log((double)unit))
         String pre = (si ? "kMGTPE" : "KMGTPE")[exp-1] + (si ? "" : "i")
-        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre)
+        return String.format("%.1f %sB", bytes / Math.pow((double)unit, (double)exp), pre)
     }
     
     /**
