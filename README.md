@@ -157,6 +157,64 @@ git remote add origin https://github.com/yourusername/jenkins-pipeline-sample.gi
 git push -u origin master
 ```
 
+### 3. GitHub身份验证
+
+从2021年8月13日起，GitHub不再支持使用用户名和密码进行Git操作。您需要使用个人访问令牌或SSH密钥进行身份验证。
+
+#### 使用个人访问令牌（推荐）
+
+1. 在GitHub上创建个人访问令牌：
+   - 登录GitHub并进入"Settings" > "Developer settings" > "Personal access tokens"
+   - 点击"Generate new token"
+   - 添加描述，选择`repo`权限
+   - 生成令牌并复制它
+
+2. 使用令牌进行身份验证：
+   ```bash
+   # 方法1：更新远程URL包含令牌
+   git remote set-url origin https://<your-token>@github.com/yourusername/jenkins-pipeline-sample.git
+   
+   # 方法2：在推送时输入令牌作为密码
+   git push -u origin main
+   ```
+   当提示输入密码时，输入您的个人访问令牌。
+
+#### 使用SSH密钥（更安全）
+
+1. 生成SSH密钥：
+   ```bash
+   ssh-keygen -t ed25519 -C "your_email@example.com"
+   ```
+
+2. 将SSH密钥添加到ssh-agent：
+   ```bash
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/id_ed25519
+   ```
+
+3. 将公钥添加到GitHub：
+   - 复制公钥：`cat ~/.ssh/id_ed25519.pub`
+   - 在GitHub中添加SSH密钥：Settings > SSH and GPG keys > New SSH key
+
+4. 更新远程URL使用SSH：
+   ```bash
+   git remote set-url origin git@github.com:yourusername/jenkins-pipeline-sample.git
+   ```
+
+5. 推送代码：
+   ```bash
+   git push -u origin main
+   ```
+
+#### 验证SSH连接
+
+配置SSH密钥后，您可以测试与GitHub的连接：
+```bash
+ssh -T git@github.com
+```
+
+如果看到类似"Hi username! You've successfully authenticated..."的消息，表示SSH配置成功。
+
 ### 3. 后续推送更改
 
 在进行更改并提交后，可以使用以下命令推送：
