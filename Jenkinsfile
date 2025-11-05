@@ -1,4 +1,6 @@
 // Jenkins Pipeline 示例，演示如何使用共享库中的 mySteps
+
+// 引入共享库：从 GitHub 仓库的 main 分支检索代码，使用 SSH 凭据进行访问
 library identifier: 'jenkins-pipeline-sample@main', retriever: modernSCM(gitSource(traits: [gitBranchDiscovery()], credentialsId: 'GitHub-ssh', remote: 'git@github.com:yangwenjie008/jenkins-pipeline-sample.git'))
 
 pipeline {
