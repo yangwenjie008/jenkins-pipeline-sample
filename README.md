@@ -112,10 +112,12 @@ Test results:
 1. 登录到您的GitHub账户
 2. 点击右上角的"+"号，选择"New repository"
 3. 为仓库输入一个名称（例如：jenkins-pipeline-sample）
-4. （可选）添加描述
+4. （可选）添加描述，例如："Jenkins Pipeline Shared Library Sample Project"
 5. 选择仓库的可见性（Public或Private）
-6. 不要初始化仓库（不要勾选"Initialize this repository with a README"）
+6. **重要**：不要初始化仓库（不要勾选"Initialize this repository with a README"、".gitignore"或"License"）
 7. 点击"Create repository"
+
+创建完成后，GitHub会显示仓库页面，其中包含推送现有仓库的说明。
 
 ### 2. 将本地项目推送到GitHub
 
@@ -123,7 +125,7 @@ Test results:
 
 ```bash
 # 添加GitHub远程仓库（将URL替换为您在GitHub上创建的仓库URL）
-git remote add origin https://github.com/yourusername/your-repo-name.git
+git remote add origin https://github.com/yourusername/jenkins-pipeline-sample.git
 
 # 验证远程仓库已正确添加
 git remote -v
@@ -149,7 +151,7 @@ git config --global user.name "Your Name"
 git commit -m "Initial commit"
 
 # 添加GitHub远程仓库（将URL替换为您在GitHub上创建的仓库URL）
-git remote add origin https://github.com/yourusername/your-repo-name.git
+git remote add origin https://github.com/yourusername/jenkins-pipeline-sample.git
 
 # 推送代码到GitHub
 git push -u origin master
@@ -169,6 +171,25 @@ git commit -m "描述您的更改"
 # 推送到GitHub
 git push
 ```
+
+### 4. 处理常见问题
+
+如果在推送时遇到问题，可能需要：
+
+1. **强制推送**（谨慎使用，会覆盖远程历史）：
+   ```bash
+   git push -f origin master
+   ```
+
+2. **拉取远程更改**（在推送前合并远程更改）：
+   ```bash
+   git pull origin master
+   ```
+
+3. **检查远程仓库URL**：
+   ```bash
+   git remote -v
+   ```
 
 ## 在本地运行Jenkins
 
@@ -301,7 +322,7 @@ pipeline {
 
 示例Pipeline脚本（Jenkinsfile）：
 
-```groovy
+```
 // 在SCM方式中，您仍然可以使用共享库
 @Library('jenkins-pipeline-sample') _
 
