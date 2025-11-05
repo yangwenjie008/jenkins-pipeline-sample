@@ -8,8 +8,12 @@ pipeline {
         stage('Demo Python') {
             steps {
                 script {
-                    // Demo execute simple Python script
-                    def result1 = python.execute('print("Hello from Python!")')
+                    // Demo execute simple Python script with sandbox and timeout
+                    def result1 = python.execute(
+                        script: 'print("Hello from Python!")',
+                        sandbox: true,
+                        timeout: 30
+                    )
                     echo "Python output: ${result1}"
                     
                     // Demo more complex Python script
@@ -34,8 +38,18 @@ print()
 print(f"Python version: {sys.version}")
 '''
                     
-                    def result2 = python.execute(scriptContent)
-                    echo "Complex Python script output:\n${result2}"
+                    try {
+                        // Execute complex script with sandbox and timeout protection
+                        def result2 = python.execute(
+                            script: scriptContent,
+                            sandbox: true,
+                            timeout: 60
+                        )
+                        echo "Complex Python script output:\n${result2}"
+                    } catch (Exception e) {
+                        echo "Error executing complex Python script: ${e.getMessage()}"
+                        throw e
+                    }
                     
                     // Demo writing and executing a Python file
                     def tempDir = pwd(tmp: true)
@@ -62,8 +76,12 @@ for f in files:
                     // Write the Python script to a file
                     writeFile file: scriptPath, text: fileContent
                     
-                    // Execute the Python file
-                    def result3 = python.executeFile(scriptPath)
+                    // Execute the Python file with sandbox and timeout
+                    def result3 = python.executeFile(
+                        path: scriptPath,
+                        sandbox: true,
+                        timeout: 45
+                    )
                     echo "Python file execution output:\n${result3}"
                 }
             }

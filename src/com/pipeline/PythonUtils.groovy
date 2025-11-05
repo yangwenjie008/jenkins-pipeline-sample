@@ -12,8 +12,10 @@ class PythonUtils {
      * @return The output of the Python script
      */
     static String executePythonScript(String scriptContent) {
-        // Create a temporary file for the script
-        def tempScript = File.createTempFile("python_script", ".py")
+        // Use Jenkins's temporary directory mechanism instead of File.createTempFile
+        def tempDir = System.getProperty("java.io.tmpdir")
+        def fileName = "python_script_${System.currentTimeMillis()}.py"
+        def tempScript = new File(tempDir, fileName)
         tempScript.write(scriptContent)
         
         try {
