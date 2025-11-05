@@ -69,7 +69,7 @@ class CommonUtils {
         if (bytes < unit) {
             return "${bytes} B"
         }
-        int exp = (int) (Math.log(bytes) / Math.log(unit))
+        int exp = (int) (Math.log(bytes.toDouble()) / Math.log(unit.toDouble()))
         String pre = (si ? "kMGTPE" : "KMGTPE")[exp-1] + (si ? "" : "i")
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre)
     }
