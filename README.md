@@ -376,18 +376,44 @@ echo "Email is valid: ${isValid}"
 
 ### Python Methods
 
-The library also provides Python integration capabilities through the `python` global variable:
+The library also provides Python integration capabilities through two different approaches:
 
+#### Approach 1: Using `python` global variable (Direct approach)
 1. `python.execute(scriptContent)` - Execute a Python script passed as a string
 2. `python.executeFile(scriptPath)` - Execute a Python script from a file
 
+#### Approach 2: Using `pythonLib` global variable (Recommended - Security focused)
+1. `pythonLib.executeInline(pythonCode)` - Execute inline Python code directly
+2. `pythonLib.execute(scriptContent)` - Execute a Python script passed as a string
+3. `pythonLib.executeFile(scriptPath)` - Execute a Python script from a file
+
+The `pythonLib` approach is recommended as it follows Jenkins security best practices and avoids using restricted Java methods.
+
 Example usage:
 ``groovy
-// Execute a simple Python script
-def result = python.execute('print("Hello from Python!")')
+// Execute inline Python code
+def result = pythonLib.executeInline('print("Hello from Python!")')
+
+// Execute a Python script from a string
+def result = pythonLib.execute('print("Hello from Python script!")')
 
 // Execute a Python script from a file
-def result = python.executeFile('/path/to/script.py')
+def result = pythonLib.executeFile('/path/to/script.py')
 ```
 
-See [example-python-pipeline.groovy](example-python-pipeline.groovy) for a complete example.
+See [example-pythonlib-pipeline.groovy](example-pythonlib-pipeline.groovy) for a complete example.
+
+### Security Considerations
+
+Due to Jenkins sandbox restrictions, some operations may require approval from administrators:
+
+1. If you encounter "Scripts not permitted to use ..." errors, consider using the alternative approach with `sh` step.
+2. See [example-python-alternative-pipeline.groovy](example-python-alternative-pipeline.groovy) for examples using `sh` step to execute Python.
+
+Alternative approach using `sh` step:
+```groovy
+def result = sh(
+    script: 'python -c "print(\"Hello from Python!\")"',
+    returnStdout: true
+)
+```

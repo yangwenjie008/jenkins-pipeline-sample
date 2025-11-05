@@ -4,11 +4,21 @@
  */
 
 def execute(scriptContent) {
-    return com.pipeline.PythonUtils.executePythonScript(scriptContent)
+    try {
+        return com.pipeline.PythonUtils.executePythonScript(scriptContent)
+    } catch (Exception e) {
+        echo "Error executing Python script: ${e.message}"
+        throw e
+    }
 }
 
 def executeFile(scriptPath) {
-    return com.pipeline.PythonUtils.executePythonFile(scriptPath)
+    try {
+        return com.pipeline.PythonUtils.executePythonFile(scriptPath)
+    } catch (Exception e) {
+        echo "Error executing Python file '${scriptPath}': ${e.message}"
+        throw e
+    }
 }
 
 def call() {
