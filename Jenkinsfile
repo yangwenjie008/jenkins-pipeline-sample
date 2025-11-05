@@ -12,6 +12,7 @@ pipeline {
             steps{
                 script{
                     sh "./gradlew clean test"
+                    sh "./gradlew analyzeCoverage"
                 }
             }
         }
