@@ -341,8 +341,50 @@ pipeline {
 
 如果遇到问题，请检查以下几点：
 
-1. **网络连接**：确保Jenkins可以访问GitHub
-2. **凭据配置**：检查凭据是否正确配置
+1. **网络连接**：确保Jenkins服务器可以访问GitHub
+2. **凭据配置**：确保已正确配置GitHub凭据
 3. **分支名称**：确保分支名称正确（main vs master）
 4. **Jenkins权限**：确保Jenkins进程有权限访问Git仓库
 5. **防火墙/代理**：如果在企业网络中，可能需要配置代理
+
+## 使用CommonUtils类
+
+项目中包含一个[CommonUtils](file:///Users/aaron-pc/Documents/gitroot/jenkins-pipeline-sample/src/com/pipeline/CommonUtils.groovy#L7-L168)类，提供常用的工具方法，可在Jenkins Pipeline中使用。
+
+### 可用方法
+
+1. **formatTimestamp(Long timestamp, String format = "yyyy-MM-dd HH:mm:ss")** - 格式化时间戳
+2. **generateBuildId(String jobName, String buildNumber)** - 生成构建ID
+3. **isEmpty(String str)** - 检查字符串是否为空
+4. **isValidEmail(String email)** - 验证邮箱地址格式
+5. **humanReadableByteCount(long bytes, boolean si = false)** - 将字节数转换为可读格式
+6. **maskSensitiveInfo(String input, String maskChar = "*", int visibleChars = 4)** - 遮蔽敏感信息
+7. **getCurrentTimestamp()** - 获取当前时间戳
+8. **calculateDuration(long start, long end)** - 计算持续时间
+9. **mapToString(Map map, String separator = ", ")** - 将Map转换为字符串
+10. **mergeMaps(Map map1, Map map2)** - 合并两个Map
+
+### 在Pipeline中使用
+
+在Jenkins Pipeline中使用CommonUtils类的示例：
+
+```groovy
+// 导入并使用CommonUtils类
+def commonUtils = new com.pipeline.CommonUtils()
+
+// 格式化时间戳
+def formattedTime = commonUtils.formatTimestamp(System.currentTimeMillis())
+echo "Current time: ${formattedTime}"
+
+// 生成构建ID
+def buildId = commonUtils.generateBuildId("my-job", "123")
+echo "Build ID: ${buildId}"
+
+// 验证邮箱
+def isValid = commonUtils.isValidEmail("user@example.com")
+echo "Email is valid: ${isValid}"
+
+// 其他方法...
+```
+
+完整的使用示例请参考 [example-commonutils-pipeline.groovy](file:///Users/aaron-pc/Documents/gitroot/jenkins-pipeline-sample/example-commonutils-pipeline.groovy) 文件。
