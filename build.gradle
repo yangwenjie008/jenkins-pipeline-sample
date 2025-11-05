@@ -124,14 +124,27 @@ task analyzeCoverage {
     doLast {
         def testReportDir = file('build/test-results/test')
         def sourceDir = file('vars')
+        def comSourceDir = file('src/com/pipeline')
         
-        if (testReportDir.exists() && sourceDir.exists()) {
-            def sourceFiles = sourceDir.listFiles({it.name.endsWith('.groovy')} as FileFilter)
-            def testFiles = file('src/test/groovy').listFiles({it.name.endsWith('.groovy')} as FileFilter)
+        if (testReportDir.exists() && (sourceDir.exists() || comSourceDir.exists())) {
+            def sourceFiles = []
+            def testFiles = []
+            
+            if (sourceDir.exists()) {
+                sourceFiles.addAll(sourceDir.listFiles({it.name.endsWith('.groovy')} as FileFilter))
+            }
+            
+            if (comSourceDir.exists()) {
+                sourceFiles.addAll(comSourceDir.listFiles({it.name.endsWith('.groovy')} as FileFilter))
+            }
+            
+            if (file('src/test/groovy').exists()) {
+                testFiles.addAll(file('src/test/groovy').listFiles({it.name.endsWith('.groovy')} as FileFilter))
+            }
             
             println "=== Test Coverage Analysis ==="
-            println "Source files found: ${sourceFiles?.size() ?: 0}"
-            println "Test files found: ${testFiles?.size() ?: 0}"
+            println "Source files found: ${sourceFiles.size()}"
+            println "Test files found: ${testFiles.size()}"
             
             if (sourceFiles) {
                 println "\nSource files:"
@@ -154,21 +167,56 @@ task analyzeCoverage {
             }
             
             println "\nTest results:"
-            def xmlReport = new File(testReportDir, 'TEST-MyStepsSpec.xml')
-            if (xmlReport.exists()) {
-                def xml = new XmlSlurper().parse(xmlReport)
-                def tests = xml.@tests.toInteger()
-                def failures = xml.@failures.toInteger()
-                def errors = xml.@errors.toInteger()
-                def skipped = xml.@skipped.toInteger()
-                
-                println "  Total tests: $tests"
-                println "  Failures: $failures"
-                println "  Errors: $errors"
-                println "  Skipped: $skipped"
-                if (tests > 0) {
-                    def successRate = (tests - failures - errors - skipped) * 100.0 / tests
-                    println "  Success rate: ${String.format("%.1f", successRate)}%"
+            def xmlReports = testReportDir.listFiles({it.name.endsWith('.xml')} as FileFilter)
+            def totalTests = 0
+            def totalFailures = 0
+            def totalErrors = 0
+            def totalSkipped = 0
+            
+            xmlReports.each { report ->
+                if (report.exists()) {
+                    try {
+                        def xml = new XmlSlurper().parse(report)
+                        totalTests += xml.@tests.toInteger()
+                        totalFailures += xml.@failures.toInteger()
+                        totalErrors += xml.@errors.toInteger()
+                        totalSkipped += xml.@skipped.toInteger()
+                    } catch (Exception e) {
+                        println "Warning: Could not parse ${report.name}: ${e.message}"
+                    }
+                }
+            }
+            
+            println "  Total tests: $totalTests"
+            println "  Failures: $totalFailures"
+            println "  Errors: $totalErrors"
+            println "  Skipped: $totalSkipped"
+            if (totalTests > 0) {
+                def successRate = (totalTests - totalFailures - totalErrors - totalSkipped) * 100.0 / totalTests
+                println "  Success rate: ${String.format("%.1f", successRate)}%"
+            }
+            
+            // Specific analysis for CommonUtils
+            def commonUtilsReport = new File(testReportDir, 'TEST-com.pipeline.CommonUtilsTest.xml')
+            if (commonUtilsReport.exists()) {
+                println "\n=== CommonUtils Test Results ==="
+                try {
+                    def xml = new XmlSlurper().parse(commonUtilsReport)
+                    def tests = xml.@tests.toInteger()
+                    def failures = xml.@failures.toInteger()
+                    def errors = xml.@errors.toInteger()
+                    def skipped = xml.@skipped.toInteger()
+                    
+                    println "  CommonUtils tests: $tests"
+                    println "  Failures: $failures"
+                    println "  Errors: $errors"
+                    println "  Skipped: $skipped"
+                    if (tests > 0) {
+                        def successRate = (tests - failures - errors - skipped) * 100.0 / tests
+                        println "  Success rate: ${String.format("%.1f", successRate)}%"
+                    }
+                } catch (Exception e) {
+                    println "Warning: Could not parse CommonUtils test report: ${e.message}"
                 }
             }
             
