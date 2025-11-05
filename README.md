@@ -347,28 +347,13 @@ pipeline {
 4. **Jenkins权限**：确保Jenkins进程有权限访问Git仓库
 5. **防火墙/代理**：如果在企业网络中，可能需要配置代理
 
-## 使用CommonUtils类
+## Available Methods
+
+### CommonUtils Methods
 
 项目中包含一个[CommonUtils](file:///Users/aaron-pc/Documents/gitroot/jenkins-pipeline-sample/src/com/pipeline/CommonUtils.groovy#L7-L168)类，提供常用的工具方法，可在Jenkins Pipeline中使用。
 
-### 可用方法
-
-1. **formatTimestamp(Long timestamp, String format = "yyyy-MM-dd HH:mm:ss")** - 格式化时间戳
-2. **generateBuildId(String jobName, String buildNumber)** - 生成构建ID
-3. **isEmpty(String str)** - 检查字符串是否为空
-4. **isValidEmail(String email)** - 验证邮箱地址格式
-5. **humanReadableByteCount(long bytes, boolean si = false)** - 将字节数转换为可读格式
-6. **maskSensitiveInfo(String input, String maskChar = "*", int visibleChars = 4)** - 遮蔽敏感信息
-7. **getCurrentTimestamp()** - 获取当前时间戳
-8. **calculateDuration(long start, long end)** - 计算持续时间
-9. **mapToString(Map map, String separator = ", ")** - 将Map转换为字符串
-10. **mergeMaps(Map map1, Map map2)** - 合并两个Map
-
-### 在Pipeline中使用
-
-在Jenkins Pipeline中使用CommonUtils类的示例：
-
-```groovy
+```
 // 导入并使用CommonUtils类
 def commonUtils = new com.pipeline.CommonUtils()
 
@@ -388,3 +373,21 @@ echo "Email is valid: ${isValid}"
 ```
 
 完整的使用示例请参考 [example-commonutils-pipeline.groovy](file:///Users/aaron-pc/Documents/gitroot/jenkins-pipeline-sample/example-commonutils-pipeline.groovy) 文件。
+
+### Python Methods
+
+The library also provides Python integration capabilities through the `python` global variable:
+
+1. `python.execute(scriptContent)` - Execute a Python script passed as a string
+2. `python.executeFile(scriptPath)` - Execute a Python script from a file
+
+Example usage:
+``groovy
+// Execute a simple Python script
+def result = python.execute('print("Hello from Python!")')
+
+// Execute a Python script from a file
+def result = python.executeFile('/path/to/script.py')
+```
+
+See [example-python-pipeline.groovy](example-python-pipeline.groovy) for a complete example.
