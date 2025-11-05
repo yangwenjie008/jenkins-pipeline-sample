@@ -1,11 +1,13 @@
 // Jenkins Pipeline 示例，演示如何使用共享库中的 mySteps
+library identifier: 'jenkins-pipeline-sample@main', retriever: modernSCM(gitSource(traits: [gitBranchDiscovery()], credentialsId: 'GitHub-ssh', remote: 'git@github.com:yangwenjie008/jenkins-pipeline-sample.git'))
+
 pipeline {
     agent any
     
     // 引入共享库
-    libraries {
-        lib('jenkins-pipeline-sample')
-    }
+    // libraries {
+    //     lib('jenkins-pipeline-sample')
+    // }
     
     stages {
         stage('test'){
